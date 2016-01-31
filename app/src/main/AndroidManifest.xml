@@ -10,6 +10,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- Permissions added by eqiglii 2015-11-01 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+
 
     <application
         android:allowBackup="true"
@@ -25,6 +30,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Schedule detail activity -->
+        <activity
+            android:name=".activity.ScheduleActivity"
+            android:label="@string/title_activity_schedule"
+            android:theme="@style/AppTheme"
+            tools:replace="android:theme" />
 
         <!-- Activities in IRKit SDK -->
         <!-- Setup activity -->
@@ -55,6 +66,11 @@
         <!-- IRKit apikey -->
         <!-- See http://getirkit.com/en/ for details -->
         <!-- apikeyの取得方法は http://getirkit.com/ を参照してください -->
-        <meta-data android:name="com.getirkit.IRKIT_API_KEY" android:value="YOUR_API_KEY" />
+        <meta-data android:name="com.getirkit.IRKIT_API_KEY" android:value="488A659291BC4A68966FFD5B2C6C0232" />
+
+        <!-- AlarmReceiver added by eqiglii 2015-11-01 -->
+        <receiver android:name="com.getirkit.example.activity.AlarmReceiver" >
+        </receiver>
+
     </application>
 </manifest>

@@ -163,6 +163,36 @@
                 android:textIsSelectable="true" />
         </RelativeLayout>
 
+        <!-- Metadata e.g. temperature -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="15dp">
+
+            <TextView
+                android:id="@+id/activity_device__metadata_label"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:gravity="end"
+                android:text="@string/activity_device__metadata" />
+
+            <TextView
+                android:id="@+id/activity_device__metadata_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/activity_device__metadata_label"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@id/activity_device__metadata_label"
+                android:layout_toRightOf="@id/activity_device__metadata_label"
+                android:maxWidth="160dp"
+                android:textIsSelectable="true" />
+        </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/activity_device__details"
             android:layout_width="match_parent"

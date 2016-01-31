@@ -1,5 +1,8 @@
 package com.getirkit.example.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +35,10 @@ import com.getirkit.example.fragment.SignalsFragment;
 import com.getirkit.irkit.net.IRAPIError;
 import com.getirkit.irkit.net.IRAPIResult;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, IRKitEventListener, DevicesFragment.DevicesFragmentListener,
         SelectSignalActionDialogFragment.SelectSignalActionDialogFragmentListener, SignalsFragment.SignalsFragmentListener {
@@ -42,6 +49,8 @@ public class MainActivity extends AppCompatActivity
     private static final int REQUEST_SIGNAL_DETAIL = 2;
     private static final int REQUEST_WAIT_SIGNAL = 3;
     private static final int REQUEST_DEVICE_DETAIL = 4;
+    private static final int REQUEST_SCHEDULE_DETAIL = 5; // added by eqiglii 2016-01-29
+
 
     private int currentSection;
     private int editingPeripheralPosition = -1;
@@ -327,6 +336,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             selectedSignalPosition = -1;
+        } else if (requestCode == REQUEST_SCHEDULE_DETAIL) {
+            selectedSignalPosition = -1;
         } else {
             Log.e(TAG, "unknown requestCode: " + requestCode);
         }
@@ -440,6 +451,23 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    @Override
+    public void onSelectSignalActionSchedule() {
+        if (selectedSignalPosition == -1) {
+            return;
+        }
+        final IRSignal signal = IRKit.sharedInstance().signals.get(selectedSignalPosition);
+        if (signal != null) {
+            // Start ScheduleActivity
+            Bundle args = new Bundle();
+            args.putString("signalName", signal.getName());
+            args.putInt("selectedSignalPosition", selectedSignalPosition);
+            Intent intent = new Intent(this, ScheduleActivity.class);
+            intent.putExtras(args);
+            startActivityForResult(intent, REQUEST_SCHEDULE_DETAIL);
         }
     }
 

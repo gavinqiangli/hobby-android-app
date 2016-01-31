@@ -71,6 +71,7 @@
     <string name="activity_device__device_id">Device ID</string>
     <string name="activity_device__client_key">Client Key</string>
     <string name="activity_device__hostname">Hostname</string>
+    <string name="activity_device__metadata">Metadata</string>
     <string name="activity_device__ipaddress_not_available">Not available</string>
     <string name="activity_device__action_save">Save</string>
     <string name="activity_device__action_delete">Remove Device</string>

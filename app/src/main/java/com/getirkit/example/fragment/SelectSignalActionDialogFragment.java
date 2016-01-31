@@ -10,6 +10,8 @@ import android.support.v4.app.DialogFragment;
 
 import com.getirkit.example.R;
 
+import java.util.Calendar;
+
 /**
  * Dialog for selecting what action to be done for the signal.
  */
@@ -18,6 +20,7 @@ public class SelectSignalActionDialogFragment extends DialogFragment {
 
     public interface SelectSignalActionDialogFragmentListener {
         void onSelectSignalActionSend();
+        void onSelectSignalActionSchedule(); // added by eqiglii 2015-11-05
         void onSelectSignalActionEdit();
     }
 
@@ -47,6 +50,9 @@ public class SelectSignalActionDialogFragment extends DialogFragment {
                 getString(R.string.send),
                 getString(R.string.edit),
                 getString(R.string.cancel),
+                // added by eqiglii 2015-11-05
+                getString(R.string.schedule),
+                // ended by eqiglii 2015-11-05
         };
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -71,6 +77,15 @@ public class SelectSignalActionDialogFragment extends DialogFragment {
                         dialog.dismiss();
                         break;
                     }
+                    // added by eqiglii 2015-11-05
+                    case 3: { // Schedule
+                        dialog.dismiss();
+                        if (selectSignalActionDialogFragmentListener != null) {
+                            selectSignalActionDialogFragmentListener.onSelectSignalActionSchedule();
+                        }
+                        break;
+                    }
+
                 }
             }
         });

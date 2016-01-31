@@ -19,6 +19,23 @@ import com.getirkit.irkit.dialog.SignalsToDeleteDialogFragment;
 
 import java.net.InetAddress;
 
+// added by eqiglii 2015-11-22
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
+import android.app.Activity;
+// ended by eqiglii 2015-11-22
+
 /**
  * IRPeripheralの詳細を表示します。
  * Show details of IRPeripheral.
@@ -29,6 +46,9 @@ public class DeviceActivity extends AppCompatActivity implements SignalsToDelete
     private IRPeripheral peripheral;
     private String apiKey;
     private boolean showDetails = false;
+
+    // added by eqiglii 2015-11-22
+    TextView metadataTextView;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -105,12 +125,95 @@ public class DeviceActivity extends AppCompatActivity implements SignalsToDelete
         TextView hostnameTextView = (TextView) findViewById(R.id.activity_device__hostname_field);
         hostnameTextView.setText( peripheral.getHostname() );
 
+        // added by eqiglii 2015-11-22
+        // read the matadata from http get
+        metadataTextView = (TextView) findViewById(R.id.activity_device__metadata_field);
+        // check if you are connected or not
+        if(isConnected()){
+            metadataTextView.setBackgroundColor(0xFF00CC00);
+            metadataTextView.setText("You are conncted");
+        }
+        else{
+            metadataTextView.setText("You are NOT conncted");
+        }
+
+        // call AsynTask to perform network operation on separate thread
+        new HttpAsyncTask().execute("https://irkitrestapi.appspot.com/_ah/api/helloworld/v1/get_latest");
+        // ended by eqiglii 2015-11-22
+
         TextView clientKeyTextView = (TextView) findViewById(R.id.activity_device__client_key_value);
         String clientKey = IRKit.sharedInstance().getHTTPClient().getClientKey();
         if (clientKey != null) {
             clientKeyTextView.setText(clientKey);
         }
     }
+
+    /* added by eqiglii 2015-11-22
+    * for reading metadata from http get
+    */
+    public static String GET(String url){
+        InputStream inputStream = null;
+        String result = "";
+        try {
+
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            inputStream = httpResponse.getEntity().getContent();
+
+            // convert inputstream to string
+            if(inputStream != null)
+                result = convertInputStreamToString(inputStream);
+            else
+                result = "Did not work!";
+
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
+        }
+
+        return result;
+    }
+
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException{
+        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+
+    }
+
+    public boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
+    private class HttpAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+
+            return GET(urls[0]);
+        }
+        // onPostExecute displays the results of the AsyncTask.
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+            metadataTextView.setText(result);
+        }
+    }
+    // ended by eqiglii 2015-11-22
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
