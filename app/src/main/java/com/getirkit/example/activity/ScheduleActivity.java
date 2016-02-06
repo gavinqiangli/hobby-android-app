@@ -234,7 +234,12 @@ public class ScheduleActivity extends AppCompatActivity
             String[] parts = click_filename.split(","); // filename is "signalName,630"
             String part1 = parts[0]; // signalName
             String part2 = parts[1]; // 630
-            scheduleTime = Integer.valueOf(part2);
+            try {
+                scheduleTime = Integer.valueOf(part2);
+            }
+            catch(NumberFormatException e) {
+                System.out.println("parse value is not valid : " + e);
+            }
         } else {
             try {
                 scheduleTime = Integer.valueOf(click_filename); // // filename is "630"
@@ -271,7 +276,13 @@ public class ScheduleActivity extends AppCompatActivity
         }
 
         // pass the value to "selectedSignalPosition"
-        int signalPosition = Integer.valueOf(readfromFile);
+        int signalPosition = 0;
+        try {
+            signalPosition = Integer.valueOf(readfromFile);
+        }
+        catch(NumberFormatException e) {
+            System.out.println("parse value is not valid : " + e);
+        }
 
         // constract the alarmId
         int alarmId = (signalPosition + 1) * scheduleTime; // identity of the alarm, must be unique
@@ -296,10 +307,6 @@ public class ScheduleActivity extends AppCompatActivity
 
         // refresh the schedule listview
         displaySchedule();
-    }
-
-    private void closeAndFinish() {
-
     }
 
     @Override

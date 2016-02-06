@@ -107,7 +107,7 @@ public class AlarmReceiver extends BroadcastReceiver
         }
 
 
-            // Show the toast  like in above screen shot
+        // Show the toast  like in above screen shot
         Toast.makeText(context, "Alarm Triggered and Signal Sent", Toast.LENGTH_LONG).show();
 
         // it would also be neat to call WakeLocker.release(); once your alarm has done its thing.

@@ -13,6 +13,7 @@
     <!-- Permissions added by eqiglii 2015-11-01 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
 
 
@@ -70,6 +71,14 @@
 
         <!-- AlarmReceiver added by eqiglii 2015-11-01 -->
         <receiver android:name="com.getirkit.example.activity.AlarmReceiver" >
+        </receiver>
+
+        <!-- BootReceiver added by eqiglii 2016-02-06 -->
+        <receiver android:name="com.getirkit.example.activity.BootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
         </receiver>
 
     </application>
